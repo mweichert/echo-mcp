@@ -1,12 +1,14 @@
 # echo-mcp
 
-A simple FastMCP server that provides an echo tool which repeats input with the prefix "I hear you: ".
+A simple FastMCP server that provides an echo tool which repeats input with the prefix "I hear you: ". Configured as a remote MCP server with HTTP transport and no authentication required.
 
 ## Features
 
 - Single `echo` tool that outputs "I hear you: [input]"
 - Built with [FastMCP](https://github.com/jlowin/fastmcp)
-- Supports MCP (Model Context Protocol) communication
+- Remote MCP server with SSE (Server-Sent Events) transport
+- No authentication required
+- Ready for cloud deployment
 
 ## Installation
 
@@ -25,13 +27,13 @@ pip install -r requirements.txt
 
 ### Running the Server
 
-To start the MCP server:
+To start the remote MCP server:
 
 ```bash
 python server.py
 ```
 
-The server will start and wait for MCP connections via stdio.
+The server will start on `http://0.0.0.0:8000` and serve MCP requests via HTTP/SSE transport.
 
 ### Tool Documentation
 
@@ -67,26 +69,33 @@ The server can be deployed using Docker:
 docker build -t echo-mcp .
 
 # Run the container
-docker run -it echo-mcp
+docker run -p 8000:8000 echo-mcp
 ```
 
 ### Render Deployment
 
-This server is designed for MCP (Model Context Protocol) communication via stdio, which is different from traditional web services. For Render deployment:
+This server is configured as a remote MCP server with HTTP transport for easy deployment:
 
-1. **Using Docker**: The included `Dockerfile` and `render.yaml` can be used to deploy as a background worker service on Render.
+1. **Using Docker**: The included `Dockerfile` and `render.yaml` deploy as a web service on Render.
 
-2. **Important Note**: This is an MCP server that communicates via stdio (standard input/output), not HTTP. It's designed to be used by MCP clients that can communicate through stdin/stdout pipes, not web browsers or HTTP clients.
+2. **Configuration**: The server runs on port 8000 with SSE transport, making it accessible to MCP clients over HTTP.
 
-3. **Alternative**: If you need HTTP access, you might want to create a web wrapper around the MCP server or use it in an environment that supports MCP protocol directly.
+3. **No Authentication**: The server requires no authentication as requested.
+
+4. **Deployment Steps**:
+   - Connect your GitHub repo to Render
+   - Use the included `render.yaml` configuration
+   - Deploy as a web service (not background worker)
 
 ### Local Development
 
-For local development and testing with MCP clients:
+For local development and testing:
 
 ```bash
 python server.py
 ```
+
+The server will be available at `http://localhost:8000` for MCP client connections.
 
 ## Requirements
 

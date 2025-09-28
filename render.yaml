@@ -1,0 +1,11 @@
+services:
+  - type: worker
+    name: echo-mcp-server
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    region: oregon
+    autoDeploy: false
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"

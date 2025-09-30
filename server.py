@@ -17,14 +17,31 @@ mcp = FastMCP("Echo Server")
 def echo(input: str) -> str:
     """
     Echo tool that repeats the input with a prefix.
-    
+
     Args:
         input: The text to echo
-        
+
     Returns:
         The input text prefixed with "I hear you: "
     """
     return f"I hear you: {input}"
+
+
+@mcp.tool()
+async def delegate(request: str, ctx) -> str:
+    """
+    Simulates delegating a request with streaming progress updates.
+
+    Args:
+        request: The request to delegate
+
+    Returns:
+        None (all content is streamed)
+    """
+    await ctx.stream.send_text("Let me work on that for you\n")
+    await asyncio.sleep(5)
+    await ctx.stream.send_text("All Done.\n")
+    return None
 
 
 def main():

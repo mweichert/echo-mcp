@@ -52,18 +52,27 @@ async def delegate(request: str, ctx: Context = None) -> str:
     Returns:
         Results from the Executive Assistant and delegated agents.
     """
+    total_duration = 120  # 2 minutes
+    update_interval = 5  # 5 seconds
+
     # Report progress: starting work
     if ctx:
-        ctx.report_progress(0, 100, "Let me work on that for you")
+        ctx.report_progress(0, total_duration, "Let me work on that for you")
 
-    # Simulate work being done
-    await asyncio.sleep(5)
+    # Send progress updates every 5 seconds for 2 minutes
+    for elapsed in range(update_interval, total_duration, update_interval):
+        await asyncio.sleep(update_interval)
+        if ctx:
+            ctx.report_progress(elapsed, total_duration, f"Working on your request... ({elapsed}s elapsed)")
+
+    # Final sleep to reach exactly 2 minutes
+    await asyncio.sleep(update_interval)
 
     # Report progress: work complete
     if ctx:
-        ctx.report_progress(100, 100, "All Done")
+        ctx.report_progress(total_duration, total_duration, "All Done")
 
-    return "Task completed successfully."
+    return "Task completed successfully after 2 minutes of processing."
 
 
 def main():

@@ -50,13 +50,20 @@ async def delegate(request: str, ctx: Context = None) -> str:
                  want completed. Can be a single task or a list of tasks.
 
     Returns:
-        Streamed progress updates and results from the Executive Assistant
-        and delegated agents.
+        Results from the Executive Assistant and delegated agents.
     """
-    await ctx.stream.send_text("Let me work on that for you\n")
+    # Report progress: starting work
+    if ctx:
+        ctx.report_progress(0, 100, "Let me work on that for you")
+
+    # Simulate work being done
     await asyncio.sleep(5)
-    await ctx.stream.send_text("All Done.\n")
-    return None
+
+    # Report progress: work complete
+    if ctx:
+        ctx.report_progress(100, 100, "All Done")
+
+    return "Task completed successfully."
 
 
 def main():

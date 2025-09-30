@@ -27,8 +27,8 @@ def echo(input: str) -> str:
     return f"I hear you: {input}"
 
 
-@mcp.tool()
-async def delegate(request: str, ctx: Context) -> str:
+@mcp.tool(exclude_args=["ctx"])
+async def delegate(request: str, ctx: Context = None) -> str:
     """
     Delegate a request to an AI Agent Executive Assistant.
 

@@ -7,7 +7,7 @@ Configured as a remote MCP server with HTTP transport and no authentication.
 """
 
 import asyncio
-from fastmcp import FastMCP
+from fastmcp import FastMCP, Context
 
 # Create the FastMCP server instance
 mcp = FastMCP("Echo Server")
@@ -28,15 +28,30 @@ def echo(input: str) -> str:
 
 
 @mcp.tool()
-async def delegate(request: str, ctx) -> str:
+async def delegate(request: str, ctx: Context) -> str:
     """
-    Simulates delegating a request with streaming progress updates.
+    Delegate a request to an AI Agent Executive Assistant.
+
+    The Executive Assistant manages a team of specialized AI agents and will
+    intelligently delegate your request to the appropriate agents to complete
+    the task. You can provide requests in natural language, just as you would
+    with ChatGPT or Claude.
+
+    Examples of requests:
+    - "Analyze the sales data from Q3 and create a summary report"
+    - "Research the latest trends in AI and write a blog post"
+    - "Debug the authentication issue in the login module"
+    - "Create a marketing plan for our new product launch"
+
+    The assistant will provide real-time progress updates as work proceeds.
 
     Args:
-        request: The request to delegate
+        request: A natural language prompt describing the task or tasks you
+                 want completed. Can be a single task or a list of tasks.
 
     Returns:
-        None (all content is streamed)
+        Streamed progress updates and results from the Executive Assistant
+        and delegated agents.
     """
     await ctx.stream.send_text("Let me work on that for you\n")
     await asyncio.sleep(5)
